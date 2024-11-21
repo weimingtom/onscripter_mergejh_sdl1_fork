@@ -1,0 +1,122 @@
+;
+;一个中文DEMO
+;
+
+;
+;无序的初始化部分
+;
+*define
+
+;
+;插件
+;
+spi "jpgplgin.dll|jpg"
+arc "arc.sar|scrunarc.dll"
+spi "nbzplgin.dll|nbz"
+soundpressplgin "nbzplgin.dll|nbz"
+
+;
+;窗口标题
+;
+caption "水色角色介绍DEMO1"
+
+;
+;效果
+;
+effect 2,6,500
+effect 3,10,500
+effect 4,13,3000
+effect 5,10,1000
+effect 6,6,500
+windoweffect 10,200
+
+;
+;参数设置
+;
+;clickstr 等待標誌,翻頁參數
+;為1時，顯示到屏幕（或對話框）滿為止，自動翻頁。
+;為2時，到離可容納字數還有1行時翻頁。
+;為3時，到離可容納字數還有2行時翻頁。
+clickstr "",2
+;
+savenumber 20
+;
+menusetwindow 15,18,2,2,0,1,#808080
+;
+mode_ext
+;
+defaultspeed 80,25,1
+;
+;underline 395
+;
+selectcolor #EEFCFD,#99CCFB
+;
+cdfadeout 1000
+
+;
+;修改窗口菜单
+;
+;0画面 1字体 2显示样式 3文字速度 4声音
+;5快进到下一选项 6自动模式 7CD音轨
+;8版本情报 10终了
+;
+killmenu 7
+killmenu 4
+
+;
+;右键菜单
+;
+rmenu "前进到下一个选择肢",skip,"消去窗口",windowerase,"回到开始",reset
+;============================================================
+
+game
+*start
+;menu_full
+setcursor 0,":l/4,160,0;cursor0.bmp",0,0
+setcursor 1,":l/4,160,0;cursor0.bmp",0,2
+erasetextwindow 1
+
+
+;bg "omake\p_13.jpg",3
+
+bg black,5
+
+setwindow 230,200,35,20,16,14,0,2,25,1,1,#ffffff,0,0,639,479
+!s100
+
+▼　猫猫软件@　
+▼　汉化制作LENIN  \
+bg white,3
+
+setwindow 80,378,35,20,22,22,0,5,25,1,1,":a;waku3.bmp",55,365
+!sd
+
+;〓＿＿＿＿スタート＿＿\
+
+
+bg "k3.jpg",5
+
+…一定这家伙非常高兴吧。会
+就像那样，写着给妈妈的信。\
+
+;＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+
+bg black,3
+
+然后那家伙好像每日都会
+去检查着家里的邮箱。\
+
+bg "k1.jpg",5
+高高兴兴地跑向门口
+然后寂寞地回来。\
+
+bg black,3
+
+
+click
+click
+
+bg white,5
+stop
+
+goto *start

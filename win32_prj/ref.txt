@@ -1,0 +1,120 @@
+﻿https://github.com/weimingtom/onscripter_sdl2_fork
+https://github.com/weimingtom/onscripter_en_fork
+https://github.com/ogapee/onscripter
+https://github.com/weimingtom/onscripter-libretro_fork/tree/master/onscripter-libretro/deps/onscripter-jh
+
+
+----
+caption charset bug:
+
+
+UTF8_CAPTION
+
+
+----
+cursor0.bmp not show bug:
+
+setcursor
+cursor_info
+drawTaggedSurface(surface, &cursor_info[0], clip);
+loadCursor
+
+bool ONScripter::doClickEnd()
+   
+    //draw_cursor_flag = true;
+	refresh_shadow_text_mode |= REFRESH_CURSOR_MODE;
+
+    //draw_cursor_flag = false;
+	refresh_shadow_text_mode &= ~REFRESH_CURSOR_MODE;
+	stopAnimation(clickstr_state);
+
+-----
+int ONScripter::textCommand()
+
+    char *buf = script_h.getStringBuffer();
+
+
+#if defined(_MSC_VER) && (_MSC_VER <= 1200)
+	OutputDebugStringA(buf);
+	OutputDebugStringA("\n");
+#endif
+
+
+processText:
+
+会make bug
+…一定这家伙非常高兴吧。会
+
+while(processText());
+
+
+bool ONScripter::processText()
+bug is here--->if ( IS_TWO_BYTE(ch) ){ // Shift jis
+
+ScriptHandler.h
+#define IS_TWO_BYTE(x) \
+        ( ((unsigned char)(x) > (unsigned char)0x80) && ((unsigned char)(x) !=(unsigned char) 0xff) )
+
+DirectReader.cpp
+#define IS_TWO_BYTE(x) \
+        ( ((unsigned char)(x) > (unsigned char)0x80) && ((unsigned char)(x) !=(unsigned char) 0xff) )
+
+need to change?
+
+ONScripter_text.cpp
+out put one char, see out_text value--->
+            drawChar( out_text, &sentence_font, true, true, accumulation_surface, &text_info );
+
+
+
+#define DEFAULT_START_KINSOKU "」』）］｝、。，．。？！ヽヾゝゞ々ー"
+#define DEFAULT_END_KINSOKU   "「『（［｛"
+bool ONScripter::checkLineBreak(const char *buf, FontInfo *fi)
+{
+isEndKinsoku( buf ))
+
+string_buffer_offset+=number not good
+
+
+
+
+double byte char jump here:
+        num_chars_in_sentence++;
+-->        string_buffer_offset += 2;
+
+        return true;
+    }
+    else if ( ch == '@' ){ // wait for click
+
+wrong jump here:
+        if ( script_h.getStringBuffer()[ string_buffer_offset + 1 ] &&
+             !(script_h.getEndStatus() & ScriptHandler::END_1BYTE_CHAR))
+--->            string_buffer_offset++;
+--->        string_buffer_offset++;
+
+        return true;
+    }
+
+    return false;
+}
+
+
+
+        if ( script_h.getStringBuffer()[ string_buffer_offset + 1 ] &&
+             !(script_h.getEndStatus() & ScriptHandler::END_1BYTE_CHAR)){
+\r(10,0x0a)+? two bytes ->            out_text[1] = script_h.getStringBuffer()[ string_buffer_offset + 1 ];
+\r(10,0x0a)+? two bytes draw here--->            drawChar( out_text, &sentence_font, flush_flag, true, accumulation_surface, &text_info );
+            num_chars_in_sentence++;
+        }
+
+search 
+end_status |= END_1BYTE_CHAR;
+
+
+
+
+    if (cmd[0] == 0x0a)
+        return RET_CONTINUE | RET_EOL;
+
+
+-----
